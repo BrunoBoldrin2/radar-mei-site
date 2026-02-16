@@ -1,56 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Radar MEI</title>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Radar MEI</title>
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#f5f7fb;
+  color:#222;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px;
+  text-align:center;
+}
+
+h1{
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  font-size:20px;
+  color:#555;
+  margin-bottom:40px;
+}
+
+.card{
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+input{
+  padding:15px;
+  font-size:18px;
+  width:250px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  margin-top:20px;
+  padding:15px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+
+.resultado{
+  margin-top:25px;
+  padding:20px;
+  border-radius:10px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:50px;
+}
+
+.feature{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+.cta{
+  margin-top:60px;
+  padding:40px;
+  background:#2563eb;
+  color:white;
+  border-radius:14px;
+}
+
+.cta button{
+  background:white;
+  color:#2563eb;
+  font-weight:bold;
+}
+
+.loading{
+  margin-top:10px;
+  display:none;
+  font-weight:bold;
+}
+
+</style>
 </head>
 
-<body style="font-family: Arial; text-align:center; margin-top:50px;">
+<body>
+
+<div class="container">
 
 <h1>Radar MEI</h1>
-<p>Descubra se você vai ultrapassar o limite do MEI</p>
+<p class="subtitle">
+Descubra antes se você vai ultrapassar o limite do MEI.
+</p>
 
-<input id="valor" type="number" placeholder="Faturamento mensal" />
-<br><br>
+<div class="card">
+
+<h2>Simule seu risco agora</h2>
+
+<input id="valor" type="number" placeholder="Faturamento mensal (R$)">
+<br>
 
 <button id="botao" onclick="analisar()">Analisar risco</button>
 
-  <p id="loading" style="display:none; font-weight:bold;">
-  Analisando sua situação...
-</p>
+<p id="loading" class="loading">Analisando sua situação...</p>
 
+<div id="resultado" class="resultado"></div>
 
+</div>
 
-<div id="resultado" style="
-  margin-top:30px;
-  font-size:22px;
-  font-weight:bold;
-  padding:20px;
-  border-radius:10px;
-  display:inline-block;
-"></div>
+<div class="features">
 
-  
-  <script>
-async function analisar() {
+<div class="feature">
+<h3>📈 Crescimento invisível</h3>
+<p>Muitos MEIs ultrapassam o limite sem perceber.</p>
+</div>
 
-  const valorInput = document.getElementById("valor");
-  const valor = valorInput.value;
+<div class="feature">
+<h3>⚠️ Evite impostos inesperados</h3>
+<p>Ultrapassar o limite pode gerar cobrança retroativa.</p>
+</div>
+
+<div class="feature">
+<h3>🛡️ Monitoramento automático</h3>
+<p>Receba alertas antes que o problema aconteça.</p>
+</div>
+
+</div>
+
+<div class="cta">
+<h2>Pare de acompanhar o MEI manualmente</h2>
+<p>Deixe o Radar MEI avisar você antes de qualquer risco.</p>
+<button>Quero ser avisado antes</button>
+</div>
+
+</div>
+
+<script>
+
+async function analisar(){
+
+  const valor = document.getElementById("valor").value;
   const botao = document.getElementById("botao");
   const loading = document.getElementById("loading");
   const resultado = document.getElementById("resultado");
 
-  if (!valor || valor <= 0) {
+  if(!valor || valor <= 0){
     alert("Digite um valor válido.");
     return;
   }
 
   botao.disabled = true;
   botao.innerText = "Analisando...";
-  loading.style.display = "block";
-  resultado.innerHTML = "";
+  loading.style.display="block";
+  resultado.innerHTML="";
 
-  try {
+  try{
 
     const resposta = await fetch(
       "https://radar-mei-api-production.up.railway.app/simular?valor=" + valor
@@ -58,28 +186,31 @@ async function analisar() {
 
     const dados = await resposta.json();
 
-    // cálculo do score
-    let score = Math.max(0, Math.round(100 - dados.percentual_limite));
+    let cor="#4CAF50";
+    if(dados.risco==="moderado") cor="#FFC107";
+    if(dados.risco==="alto") cor="#F44336";
 
-    let cor = "#4CAF50";
-    if (dados.risco === "moderado") cor = "#FFC107";
-    if (dados.risco === "alto") cor = "#F44336";
+    const score=Math.max(0,Math.round(100-dados.percentual_limite));
 
-    resultado.style.backgroundColor = cor;
-    resultado.style.color = "white";
+    resultado.style.backgroundColor=cor;
+    resultado.style.color="white";
 
-    resultado.innerHTML =
-      "<h2>Saúde Fiscal: " + score + "/100</h2>" +
-      "<b>Risco:</b> " + dados.risco.toUpperCase() +
-      "<br>Projeção anual: R$ " + dados.projecao_anual +
-      "<br>Uso do limite: " + dados.percentual_limite + "%";
+    resultado.innerHTML=
+      "Saúde Fiscal: "+score+"/100<br>"+
+      "Risco: "+dados.risco.toUpperCase()+"<br>"+
+      "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
+      "Uso do limite: "+dados.percentual_limite+"%";
 
-  } catch (erro) {
-    resultado.innerHTML = "Erro ao consultar a API.";
+  }catch(e){
+    resultado.innerHTML="Erro ao consultar API.";
   }
 
-  botao.disabled = false;
-  botao.innerText = "Analisar risco";
-  loading.style.display = "none";
+  botao.disabled=false;
+  botao.innerText="Analisar risco";
+  loading.style.display="none";
 }
+
 </script>
+
+</body>
+</html>
