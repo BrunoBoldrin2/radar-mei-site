@@ -220,17 +220,16 @@ async function analisar(){
 
     const dados = await resposta.json();
 
-   let cor="#4CAF50";
-
-if(score <= 60) cor="#FFC107";
-if(score <= 35) cor="#F44336";
-
-
-   let score = 100;
+    let score = 100;
 
 if(dados.risco === "baixo") score = 85;
 if(dados.risco === "moderado") score = 55;
 if(dados.risco === "alto") score = 25;
+ 
+    let cor="#4CAF50";
+
+if(score <= 60) cor="#FFC107";
+if(score <= 35) cor="#F44336";
 
 
     const limiteMEI = 81000;
