@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Radar MEI</title>
+  <meta charset="UTF-8">
+</head>
+
+<body style="font-family: Arial; text-align:center; margin-top:50px;">
+
+<h1>Radar MEI</h1>
+<p>Descubra se você vai ultrapassar o limite do MEI</p>
+
+<input id="valor" type="number" placeholder="Faturamento mensal" />
+<br><br>
+
+<button onclick="analisar()">Analisar risco</button>
+
+<h2 id="resultado"></h2>
+
+<script>
+async function analisar() {
+
+  const valor = document.getElementById("valor").value;
+
+  const resposta = await fetch(
+    "https://radar-mei-api-production.up.railway.app//simular?valor=" + valor
+  );
+
+  const dados = await resposta.json();
+
+  document.getElementById("resultado").innerHTML =
+    "Risco: " + dados.risco +
+    "<br>Projeção anual: R$ " + dados.projecao_anual +
+    "<br>Uso do limite: " + dados.percentual_limite + "%";
+}
+</script>
+
+</body>
+</html>
