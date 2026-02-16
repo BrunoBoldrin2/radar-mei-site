@@ -220,11 +220,18 @@ async function analisar(){
 
     const dados = await resposta.json();
 
-    let cor="#4CAF50";
-    if(dados.risco==="moderado") cor="#FFC107";
-    if(dados.risco==="alto") cor="#F44336";
+   let cor="#4CAF50";
 
-    const score=Math.max(0,Math.round(100-dados.percentual_limite));
+if(score <= 60) cor="#FFC107";
+if(score <= 35) cor="#F44336";
+
+
+   let score = 100;
+
+if(dados.risco === "baixo") score = 85;
+if(dados.risco === "moderado") score = 55;
+if(dados.risco === "alto") score = 25;
+
 
     const limiteMEI = 81000;
 const restante = Math.max(0, limiteMEI - dados.projecao_anual);
