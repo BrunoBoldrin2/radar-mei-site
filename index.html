@@ -216,19 +216,15 @@ async function analisar(){
   loading.style.display="block";
   resultado.innerHTML="";
 
-  // abre captura automática em caso de risco
-if(dados.risco === "moderado" || dados.risco === "alto"){
-  setTimeout(() => {
-    abrirModal();
-  }, 1200);
-}
-
-
   try{
 
     const resposta = await fetch(
-      "https://radar-mei-api-production.up.railway.app/simular?valor=" + valor
+      "https://SEU-ENDERECO-RAILWAY.up.railway.app/simular?valor="+valor
     );
+
+    if(!resposta.ok){
+      throw new Error("Erro na API");
+    }
 
     const dados = await resposta.json();
 
@@ -247,7 +243,16 @@ if(dados.risco === "moderado" || dados.risco === "alto"){
       "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
       "Uso do limite: "+dados.percentual_limite+"%";
 
+    // 👇 modal automático (AGORA NO LUGAR CERTO)
+    if(
+      (dados.risco==="moderado" || dados.risco==="alto") &&
+      typeof abrirModal === "function"
+    ){
+      setTimeout(() => abrirModal(), 1200);
+    }
+
   }catch(e){
+    console.error(e);
     resultado.innerHTML="Erro ao consultar API.";
   }
 
@@ -255,6 +260,7 @@ if(dados.risco === "moderado" || dados.risco === "alto"){
   botao.innerText="Analisar risco";
   loading.style.display="none";
 }
+
 
 </script>
 <footer style="
