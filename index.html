@@ -236,28 +236,40 @@ async function analisar(){
 
     const score=Math.max(0,Math.round(100-dados.percentual_limite));
 
+    const limiteMEI = 81000;
+const restante = Math.max(0, limiteMEI - dados.projecao_anual);
+
+
     // abrir modal automaticamente se score baixo
-if(score < 60 && !modalJaExibido){
+if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
     sessionStorage.setItem("modalExibido", "true");
 
+    // tempo suficiente para leitura do resultado
     setTimeout(() => {
+
         if(typeof abrirModal === "function"){
+            preencherResumoModal(score, restante);
             abrirModal();
         }
-    }, 1500);
+
+    }, 5000); // 5 segundos
 }
+
 
 
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
 
-    resultado.innerHTML=
-      "Saúde Fiscal: "+score+"/100<br>"+
-      "Risco: "+dados.risco.toUpperCase()+"<br>"+
-      "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
-      "Uso do limite: "+dados.percentual_limite+"%";
+    resultado.innerHTML =
+  "Saúde Fiscal: "+score+"/100<br>"+
+  "Risco: "+dados.risco.toUpperCase()+"<br>"+
+  "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
+  "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
+  "⚠️ Faltam aproximadamente <b>R$ "+restante.toLocaleString('pt-BR')+
+  "</b> para atingir o limite anual do MEI.";
+
 
     // 👇 modal automático (AGORA NO LUGAR CERTO)
     if(
@@ -284,6 +296,19 @@ if(score < 60 && !modalJaExibido){
 function fecharModal(){
   document.getElementById("emailModal").style.display = "none";
 }
+
+function preencherResumoModal(score, restante){
+
+  const resumo = document.getElementById("resumoModal");
+
+  resumo.innerHTML =
+    "Seu score atual é <b>"+score+"/100</b>.<br>"+
+    "Você está a aproximadamente <b>R$ "+
+    restante.toLocaleString('pt-BR')+
+    "</b> do limite anual.<br><br>"+
+    "Podemos avisar você automaticamente antes de qualquer risco.";
+}
+  
 
 
 </script>
@@ -321,6 +346,9 @@ max-width:400px;
 
 <h2>Evite ultrapassar o limite sem perceber
 </h2>
+
+  <p id="resumoModal" style="color:#444; margin-top:10px;"></p>
+
 
 <form action="https://formspree.io/f/mjgerynj" method="POST">
 
