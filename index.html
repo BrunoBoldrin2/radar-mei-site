@@ -133,6 +133,34 @@ Descubra antes se você vai ultrapassar o limite do MEI.
 
 <p id="loading" class="loading">Analisando sua situação...</p>
 
+<div id="scoreContainer" style="margin-top:20px; display:none;">
+
+  <div style="font-weight:bold; margin-bottom:8px;">
+    Saúde Fiscal
+  </div>
+
+  <div style="
+    width:100%;
+    background:#e5e7eb;
+    border-radius:999px;
+    height:18px;
+    overflow:hidden;
+  ">
+
+    <div id="scoreBar" style="
+      height:100%;
+      width:0%;
+      background:#4CAF50;
+      transition:width 1.2s ease;
+    "></div>
+
+  </div>
+
+  <div id="scoreTexto" style="margin-top:6px; font-weight:bold;"></div>
+
+</div>
+  
+  
 <div id="resultado" class="resultado"></div>
 
 <p style="font-size:12px; color:#666; margin-top:10px;">
@@ -277,6 +305,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
 
     resultado.style.backgroundColor=cor;
+    atualizarScoreVisual(score, cor);
     resultado.style.color="white";
 
  resultado.innerHTML =
@@ -323,6 +352,22 @@ function preencherResumoModal(score, restante){
     "Podemos avisar você automaticamente antes de qualquer risco.";
 }
   
+function atualizarScoreVisual(score, cor){
+
+  const container = document.getElementById("scoreContainer");
+  const barra = document.getElementById("scoreBar");
+  const texto = document.getElementById("scoreTexto");
+
+  container.style.display = "block";
+
+  // pequena pausa para ativar animação
+  setTimeout(() => {
+    barra.style.width = score + "%";
+    barra.style.background = cor;
+  }, 100);
+
+  texto.innerHTML = score + "/100";
+}
 
 
 </script>
