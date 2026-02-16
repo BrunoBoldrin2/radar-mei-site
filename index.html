@@ -198,7 +198,9 @@ Não substitui orientação contábil profissional.
 </div>
 
 <script>
+let modalJaExibido = sessionStorage.getItem("modalExibido");
 
+  
 async function analisar(){
 
   const valor = document.getElementById("valor").value;
@@ -233,6 +235,20 @@ async function analisar(){
     if(dados.risco==="alto") cor="#F44336";
 
     const score=Math.max(0,Math.round(100-dados.percentual_limite));
+
+    // abrir modal automaticamente se score baixo
+if(score < 60 && !modalJaExibido){
+
+    sessionStorage.setItem("modalExibido", "true");
+
+    setTimeout(() => {
+        if(typeof abrirModal === "function"){
+            abrirModal();
+        }
+    }, 1500);
+}
+
+
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
