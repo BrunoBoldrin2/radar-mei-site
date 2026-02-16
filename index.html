@@ -23,7 +23,7 @@ async function analisar() {
   const valor = document.getElementById("valor").value;
 
   const resposta = await fetch(
-    "https://radar-mei-api-production.up.railway.app//simular?valor=" + valor
+    "https://radar-mei-api-production.up.railway.app/simular?valor=" + valor
   );
 
   const dados = await resposta.json();
