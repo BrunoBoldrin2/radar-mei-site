@@ -279,15 +279,15 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
 
-  resultado.innerHTML =
+ resultado.innerHTML =
   "Saúde Fiscal: "+score+"/100<br>"+
   "Risco estimado: "+riscoTexto+"<br>"+
   "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
-  "⚠️ Mantendo esse ritmo, você pode atingir o limite por volta do mês <b>"+mesEstouro+"</b>.<br><br>"+
   "⚠️ Faltam aproximadamente <b>R$ "+
   restante.toLocaleString('pt-BR')+
   "</b> para atingir o limite anual do MEI.";
+
 
 
 
