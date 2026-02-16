@@ -15,6 +15,11 @@
 
 <button id="botao" onclick="analisar()">Analisar risco</button>
 
+  <p id="loading" style="display:none; font-weight:bold;">
+  Analisando sua situação...
+</p>
+
+
 
 <div id="resultado" style="
   margin-top:30px;
@@ -25,37 +30,56 @@
   display:inline-block;
 "></div>
 
+  
 <script>
 async function analisar() {
 
-  const valor = document.getElementById("valor").value;
+  const valorInput = document.getElementById("valor");
+  const valor = valorInput.value;
+  const botao = document.getElementById("botao");
+  const loading = document.getElementById("loading");
+  const resultado = document.getElementById("resultado");
 
-  const resposta = await fetch(
-    "https://radar-mei-api-production.up.railway.app/simular?valor=" + valor
-  );
-
-  const dados = await resposta.json();
-
-  let cor = "#4CAF50"; // verde padrão
-
-  if (dados.risco === "moderado") {
-    cor = "#FFC107"; // amarelo
+  // validação
+  if (!valor || valor <= 0) {
+    alert("Digite um valor válido.");
+    return;
   }
 
-  if (dados.risco === "alto") {
-    cor = "#F44336"; // vermelho
+  // estado carregando
+  botao.disabled = true;
+  botao.innerText = "Analisando...";
+  loading.style.display = "block";
+  resultado.innerHTML = "";
+
+  try {
+
+    const resposta = await fetch(
+      "https://radar-mei-api-production.up.railway.app/simular?valor=" + valor
+    );
+
+    const dados = await resposta.json();
+
+    let cor = "#4CAF50";
+
+    if (dados.risco === "moderado") cor = "#FFC107";
+    if (dados.risco === "alto") cor = "#F44336";
+
+    resultado.style.backgroundColor = cor;
+    resultado.style.color = "white";
+
+    resultado.innerHTML =
+      "Risco: " + dados.risco.toUpperCase() +
+      "<br>Projeção anual: R$ " + dados.projecao_anual +
+      "<br>Uso do limite: " + dados.percentual_limite + "%";
+
+  } catch (erro) {
+    resultado.innerHTML = "Erro ao consultar a API.";
   }
 
-  const box = document.getElementById("resultado");
-
-  box.style.backgroundColor = cor;
-  box.style.color = "white";
-
-  box.innerHTML =
-    "Risco: " + dados.risco.toUpperCase() +
-    "<br>Projeção anual: R$ " + dados.projecao_anual +
-    "<br>Uso do limite: " + dados.percentual_limite + "%";
+  // volta ao normal
+  botao.disabled = false;
+  botao.innerText = "Analisar risco";
+  loading.style.display = "none";
 }
 </script>
-
-  
