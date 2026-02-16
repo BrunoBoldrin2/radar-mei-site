@@ -31,7 +31,7 @@
 "></div>
 
   
-<script>
+  <script>
 async function analisar() {
 
   const valorInput = document.getElementById("valor");
@@ -40,13 +40,11 @@ async function analisar() {
   const loading = document.getElementById("loading");
   const resultado = document.getElementById("resultado");
 
-  // validação
   if (!valor || valor <= 0) {
     alert("Digite um valor válido.");
     return;
   }
 
-  // estado carregando
   botao.disabled = true;
   botao.innerText = "Analisando...";
   loading.style.display = "block";
@@ -60,8 +58,10 @@ async function analisar() {
 
     const dados = await resposta.json();
 
-    let cor = "#4CAF50";
+    // cálculo do score
+    let score = Math.max(0, Math.round(100 - dados.percentual_limite));
 
+    let cor = "#4CAF50";
     if (dados.risco === "moderado") cor = "#FFC107";
     if (dados.risco === "alto") cor = "#F44336";
 
@@ -69,7 +69,8 @@ async function analisar() {
     resultado.style.color = "white";
 
     resultado.innerHTML =
-      "Risco: " + dados.risco.toUpperCase() +
+      "<h2>Saúde Fiscal: " + score + "/100</h2>" +
+      "<b>Risco:</b> " + dados.risco.toUpperCase() +
       "<br>Projeção anual: R$ " + dados.projecao_anual +
       "<br>Uso do limite: " + dados.percentual_limite + "%";
 
@@ -77,7 +78,6 @@ async function analisar() {
     resultado.innerHTML = "Erro ao consultar a API.";
   }
 
-  // volta ao normal
   botao.disabled = false;
   botao.innerText = "Analisar risco";
   loading.style.display = "none";
