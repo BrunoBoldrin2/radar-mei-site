@@ -219,7 +219,7 @@ async function analisar(){
   try{
 
     const resposta = await fetch(
-      "radar-mei-api-production.up.railway.app/simular?valor="+valor
+      "https://radar-mei-api-production.up.railway.app/simular?valor="+valor
     );
 
     if(!resposta.ok){
