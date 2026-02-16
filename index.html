@@ -126,7 +126,8 @@ Descubra antes se você vai ultrapassar o limite do MEI.
 
 <h2>Simule seu risco agora</h2>
 
-<input id="valor" type="number" placeholder="Faturamento mensal (R$)">
+<input id="valor" type="text" placeholder="R$ 0,00">
+
 <br>
 
 <button id="botao" onclick="analisar()">Analisar risco</button>
@@ -221,7 +222,11 @@ let modalJaExibido = sessionStorage.getItem("modalExibido");
   
 async function analisar(){
 
-  const valor = document.getElementById("valor").value;
+  let valor = document.getElementById("valor").value
+  .replace(/\D/g,'');
+
+valor = Number(valor)/100;
+
   const botao = document.getElementById("botao");
   const loading = document.getElementById("loading");
   const resultado = document.getElementById("resultado");
@@ -282,7 +287,8 @@ if(uso >= 100){
 
 
     const limiteMEI = 81000;
-const restante = Math.max(0, limiteMEI - dados.projecao_anual);
+const restante = Math.max(0, limiteMEI - formatarReal(dados.projecao_anual)
+);
 
 
     // abrir modal automaticamente se score baixo
@@ -306,15 +312,18 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
-    atualizarScoreVisual(score, cor);
+   atualizarScoreVisual(score);
+
 
  resultado.innerHTML =
   "Saúde Fiscal: "+score+"/100<br>"+
   "Risco estimado: "+riscoTexto+"<br>"+
-  "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
+  "Projeção anual: R$ "+formatarReal(dados.projecao_anual)
++"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
   "⚠️ Faltam aproximadamente <b>R$ "+
-  restante.toLocaleString('pt-BR')+
+  formatarReal(restante)
++
   "</b> para atingir o limite anual do MEI.";
 
 
@@ -347,12 +356,50 @@ function preencherResumoModal(score, restante){
   resumo.innerHTML =
     "Seu score atual é <b>"+score+"/100</b>.<br>"+
     "Você está a aproximadamente <b>R$ "+
-    restante.toLocaleString('pt-BR')+
+    formatarReal(restante)
++
     "</b> do limite anual.<br><br>"+
     "Podemos avisar você automaticamente antes de qualquer risco.";
 }
   
-function atualizarScoreVisual(score, cor){
+function atualizarScoreVisual(score){
+
+  const container = document.getElementById("scoreContainer");
+  const barra = document.getElementById("scoreBar");
+  const texto = document.getElementById("scoreTexto");
+
+  if(!container || !barra || !texto) return;
+
+  container.style.display = "block";
+
+  let progresso = 0;
+
+  const animacao = setInterval(() => {
+
+    progresso++;
+
+    barra.style.width = progresso + "%";
+
+    // gradiente dinâmico
+    if(progresso > 70){
+      barra.style.background = "#4CAF50"; // verde
+    } 
+    else if(progresso > 40){
+      barra.style.background = "#FFC107"; // amarelo
+    } 
+    else{
+      barra.style.background = "#F44336"; // vermelho
+    }
+
+    texto.innerHTML = progresso + "/100";
+
+    if(progresso >= score){
+      clearInterval(animacao);
+    }
+
+  }, 12); // velocidade animação
+}
+
 
   const container = document.getElementById("scoreContainer");
   const barra = document.getElementById("scoreBar");
@@ -368,6 +415,28 @@ function atualizarScoreVisual(score, cor){
 
   texto.innerHTML = score + "/100";
 }
+
+  function formatarReal(valor){
+  return valor.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
+}
+
+  const inputValor = document.getElementById("valor");
+
+inputValor.addEventListener("input", function(e){
+
+  let valor = e.target.value.replace(/\D/g, "");
+
+  valor = (valor / 100).toFixed(2) + "";
+
+  valor = valor
+    .replace(".", ",")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  e.target.value = "R$ " + valor;
+});
 
 
 </script>
