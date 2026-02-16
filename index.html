@@ -216,6 +216,14 @@ async function analisar(){
   loading.style.display="block";
   resultado.innerHTML="";
 
+  // abre captura automática em caso de risco
+if(dados.risco === "moderado" || dados.risco === "alto"){
+  setTimeout(() => {
+    abrirModal();
+  }, 1200);
+}
+
+
   try{
 
     const resposta = await fetch(
@@ -281,7 +289,8 @@ text-align:center;
 max-width:400px;
 ">
 
-<h2>Receba alertas antes do limite</h2>
+<h2>Evite ultrapassar o limite sem perceber
+</h2>
 
 <form action="https://formspree.io/f/mjgerynj" method="POST">
 
