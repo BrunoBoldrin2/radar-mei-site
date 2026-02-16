@@ -110,16 +110,6 @@ button:hover{
   transition:0.2s;
 }
 
-function abrirModal(){
-  document.getElementById("emailModal").style.display="flex";
-}
-
-function fecharModal(){
-  document.getElementById("emailModal").style.display="none";
-}
-
-  
-
 </style>
 </head>
 
@@ -271,13 +261,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
   "</b> para atingir o limite anual do MEI.";
 
 
-    // 👇 modal automático (AGORA NO LUGAR CERTO)
-    if(
-      (dados.risco==="moderado" || dados.risco==="alto") &&
-      typeof abrirModal === "function"
-    ){
-      setTimeout(() => abrirModal(), 1200);
-    }
+ 
 
   }catch(e){
     console.error(e);
