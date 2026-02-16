@@ -220,16 +220,37 @@ async function analisar(){
 
     const dados = await resposta.json();
 
-    let score = 100;
+    // ===== RADAR FISCAL INTELIGENTE =====
 
-if(dados.risco === "baixo") score = 85;
-if(dados.risco === "moderado") score = 55;
-if(dados.risco === "alto") score = 25;
- 
-    let cor="#4CAF50";
+const mesAtual = new Date().getMonth() + 1;
+const percentualAno = mesAtual / 12;
 
-if(score <= 60) cor="#FFC107";
-if(score <= 35) cor="#F44336";
+const uso = dados.percentual_limite;
+
+let riscoTexto = "BAIXO";
+let cor = "#4CAF50";
+let score = 90;
+
+// zonas fiscais reais
+if(uso >= 70){
+  riscoTexto = "MODERADO";
+  cor = "#FFC107";
+  score = 65;
+}
+
+if(uso >= 90){
+  riscoTexto = "ALTO";
+  cor = "#F44336";
+  score = 40;
+}
+
+if(uso >= 100){
+  riscoTexto = "CRÍTICO";
+  cor = "#B91C1C";
+  score = 15;
+}
+
+
 
 
     const limiteMEI = 81000;
@@ -258,13 +279,16 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
 
-    resultado.innerHTML =
+  resultado.innerHTML =
   "Saúde Fiscal: "+score+"/100<br>"+
-  "Risco: "+dados.risco.toUpperCase()+"<br>"+
+  "Risco estimado: "+riscoTexto+"<br>"+
   "Projeção anual: R$ "+dados.projecao_anual+"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
-  "⚠️ Faltam aproximadamente <b>R$ "+restante.toLocaleString('pt-BR')+
+  "⚠️ Mantendo esse ritmo, você pode atingir o limite por volta do mês <b>"+mesEstouro+"</b>.<br><br>"+
+  "⚠️ Faltam aproximadamente <b>R$ "+
+  restante.toLocaleString('pt-BR')+
   "</b> para atingir o limite anual do MEI.";
+
 
 
  
