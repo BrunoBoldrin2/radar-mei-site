@@ -216,16 +216,91 @@ Não substitui orientação contábil profissional.
 
 </div>
 
+<footer style="
+  margin-top:60px;
+  padding:20px;
+  font-size:12px;
+  color:#777;
+  text-align:center;
+">
+Radar MEI é uma ferramenta informativa de monitoramento fiscal.
+Não prestamos consultoria contábil ou jurídica.
+Os resultados apresentados são estimativas e podem variar conforme a legislação vigente.
+</footer>
+
+<div id="emailModal" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:12px;
+text-align:center;
+max-width:400px;
+">
+
+<h2>Evite ultrapassar o limite sem perceber
+</h2>
+
+  <p id="resumoModal" style="color:#444; margin-top:10px;"></p>
+
+
+<form action="https://formspree.io/f/mjgerynj" method="POST">
+
+<input 
+type="text"
+name="nome"
+placeholder="Seu primeiro nome"
+required
+style="padding:12px;width:90%;margin-top:10px;border-radius:8px;border:1px solid #ccc;"
+>
+
+<br><br>
+
+<input 
+type="email"
+name="email"
+placeholder="Seu melhor e-mail"
+required
+style="padding:12px;width:90%;border-radius:8px;border:1px solid #ccc;"
+>
+
+<br><br>
+
+<button type="submit">Quero receber alertas</button>
+
+</form>
+
+
+<br>
+
+<button onclick="fecharModal()" style="background:none;color:#666;">
+Cancelar
+</button>
+
+</div>
+</div>
+
 <script>
 let modalJaExibido = sessionStorage.getItem("modalExibido");
 
   
 async function analisar(){
 
-  let valor = document.getElementById("valor").value
+ let valor = document.getElementById("valor").value
   .replace(/\D/g,'');
 
-valor = Number(valor)/100;
+valor = Number(valor) / 100;
+
 
   const botao = document.getElementById("botao");
   const loading = document.getElementById("loading");
@@ -342,12 +417,15 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 }
 
   window.abrirModal = function () {
-  document.getElementById("emailModal").style.display = "flex";
+  const modal = document.getElementById("emailModal");
+  if(modal) modal.style.display = "flex";
 };
 
 window.fecharModal = function () {
-  document.getElementById("emailModal").style.display = "none";
+  const modal = document.getElementById("emailModal");
+  if(modal) modal.style.display = "none";
 };
+
 
 
 function preencherResumoModal(score, restante){
@@ -450,83 +528,30 @@ function atualizarScoreVisual(score){
 
 });
 
+const campoValor = document.getElementById("valor");
+
+campoValor.addEventListener("input", function(e){
+
+  let numeros = e.target.value.replace(/\D/g, "");
+
+  if(!numeros){
+    e.target.value = "";
+    return;
+  }
+
+  let valorFormatado = (Number(numeros) / 100).toLocaleString(
+    "pt-BR",
+    {
+      style: "currency",
+      currency: "BRL"
+    }
+  );
+
+  e.target.value = valorFormatado;
+});
 
 
-</script>
-<footer style="
-  margin-top:60px;
-  padding:20px;
-  font-size:12px;
-  color:#777;
-  text-align:center;
-">
-Radar MEI é uma ferramenta informativa de monitoramento fiscal.
-Não prestamos consultoria contábil ou jurídica.
-Os resultados apresentados são estimativas e podem variar conforme a legislação vigente.
-</footer>
-
-<div id="emailModal" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-justify-content:center;
-align-items:center;
-">
-
-<div style="
-background:white;
-padding:30px;
-border-radius:12px;
-text-align:center;
-max-width:400px;
-">
-
-<h2>Evite ultrapassar o limite sem perceber
-</h2>
-
-  <p id="resumoModal" style="color:#444; margin-top:10px;"></p>
-
-
-<form action="https://formspree.io/f/mjgerynj" method="POST">
-
-<input 
-type="text"
-name="nome"
-placeholder="Seu primeiro nome"
-required
-style="padding:12px;width:90%;margin-top:10px;border-radius:8px;border:1px solid #ccc;"
->
-
-<br><br>
-
-<input 
-type="email"
-name="email"
-placeholder="Seu melhor e-mail"
-required
-style="padding:12px;width:90%;border-radius:8px;border:1px solid #ccc;"
->
-
-<br><br>
-
-<button type="submit">Quero receber alertas</button>
-
-</form>
-
-
-<br>
-
-<button onclick="fecharModal()" style="background:none;color:#666;">
-Cancelar
-</button>
-
-</div>
-</div>
-  
+</script>  
   
 </body>
 </html>
