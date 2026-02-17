@@ -179,6 +179,58 @@ button:hover{
   border-radius:12px;
   border:1px solid #e5e7eb;
 }
+
+.mei-radar{
+  margin-top:25px;
+  text-align:center;
+}
+
+.radar-label{
+  font-size:14px;
+  color:#6b7280;
+  margin-bottom:12px;
+}
+
+.radar-track{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#e5e7eb;
+  border-radius:999px;
+  padding:14px 18px;
+  overflow:hidden;
+}
+
+.radar-step{
+  font-size:13px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  z-index:2;
+}
+
+.radar-step span{
+  margin-top:4px;
+}
+
+#radarProgress{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:0%;
+  background:linear-gradient(
+    90deg,
+    #22c55e,
+    #f59e0b,
+    #ef4444
+  );
+  border-radius:999px;
+  transition:width 1.2s ease;
+  z-index:1;
+  opacity:0.25;
+}
   
   
 </style>
@@ -244,6 +296,41 @@ Mais de <b>300 simulações realizadas esta semana</b> por MEIs que querem evita
   
   
 <div id="resultado" class="resultado"></div>
+
+  <div class="mei-radar">
+
+  <div class="radar-label">
+    Como funciona o risco do MEI ao longo do ano
+  </div>
+
+  <div class="radar-track">
+
+    <div class="radar-step safe">
+      🟢
+      <span>Seguro</span>
+    </div>
+
+    <div class="radar-step attention">
+      🟡
+      <span>Atenção</span>
+    </div>
+
+    <div class="radar-step risk">
+      🔴
+      <span>Risco alto</span>
+    </div>
+
+    <div class="radar-step danger">
+      🚨
+      <span>Estouro</span>
+    </div>
+
+    <div id="radarProgress"></div>
+
+  </div>
+
+</div>
+
 
 <p style="font-size:12px; color:#666; margin-top:10px;">
 ⚠️ Esta simulação é apenas uma estimativa informativa baseada nos dados informados.
@@ -464,6 +551,9 @@ const mesAtual = new Date().getMonth() + 1;
 const percentualAno = mesAtual / 12;
 
 const uso = dados.percentual_limite;
+atualizarRadar(uso);
+
+    
 
 let riscoTexto = "BAIXO";
 let cor = "#4CAF50";
@@ -683,6 +773,15 @@ function atualizarScoreVisual(score, cor, onComplete){
 
 });
 
+function atualizarRadar(percentual){
+
+  const barra = document.getElementById("radarProgress");
+  if(!barra) return;
+
+  let progresso = Math.min(percentual, 120);
+
+  barra.style.width = progresso + "%";
+}
 
 </script>  
   
