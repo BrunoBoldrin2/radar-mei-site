@@ -730,27 +730,28 @@ function atualizarRadar(percentual){
 
   let posicaoVisual = 0;
 
-  // ===== MAPEAMENTO INTELIGENTE =====
+  // ===== ESCALA REAL DO MEI =====
 
   if(percentual <= 70){
-    // zona segura ocupa 50% da barra
-    posicaoVisual = (percentual / 70) * 50;
+    // zona segura ocupa 70% da barra
+    posicaoVisual = (percentual / 70) * 70;
   }
   else if(percentual <= 90){
-    // atenção ocupa 25%
-    posicaoVisual = 50 + ((percentual - 70) / 20) * 25;
+    // atenção ocupa 20%
+    posicaoVisual = 70 + ((percentual - 70) / 20) * 20;
   }
   else if(percentual <= 100){
-    // risco alto ocupa 15%
-    posicaoVisual = 75 + ((percentual - 90) / 10) * 15;
+    // risco alto ocupa 8%
+    posicaoVisual = 90 + ((percentual - 90) / 10) * 8;
   }
   else{
-    // estouro ocupa últimos 10%
-    posicaoVisual = 90 + Math.min((percentual - 100), 20) * 0.5;
+    // estouro ocupa últimos 2%
+    posicaoVisual = 98 + Math.min(percentual - 100, 20) * 0.1;
   }
 
   barra.style.width = posicaoVisual + "%";
 }
+
 
 
 function executarDiagnosticoIA(){
