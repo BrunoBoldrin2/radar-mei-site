@@ -341,13 +341,14 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
   loading.style.display="none";
 }
 
-  function abrirModal(){
+  window.abrirModal = function () {
   document.getElementById("emailModal").style.display = "flex";
-}
+};
 
-function fecharModal(){
+window.fecharModal = function () {
   document.getElementById("emailModal").style.display = "none";
-}
+};
+
 
 function preencherResumoModal(score, restante){
 
