@@ -128,18 +128,24 @@ button:hover{
 
 .feature-row{
   margin-top:60px;
-  display:flex;
-  justify-content:center;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
   gap:25px;
-  flex-wrap:wrap;
+  max-width:1000px;
+  margin-left:auto;
+  margin-right:auto;
 }
+
 
 .feature{
-  flex:1;
-  min-width:260px;
-  max-width:320px;
+  width:100%;
 }
 
+@media (max-width: 900px){
+  .feature-row{
+    grid-template-columns:1fr;
+  }
+}
   
 </style>
 </head>
