@@ -602,7 +602,7 @@ const restante = Math.max(
 
 
     // abrir modal automaticamente se score baixo
-if(uso >= 90 && !sessionStorage.getItem("modalExibido"))
+if(uso >= 90 && !sessionStorage.getItem("modalExibido")) {
 
 
     sessionStorage.setItem("modalExibido", "true");
@@ -611,7 +611,7 @@ if(uso >= 90 && !sessionStorage.getItem("modalExibido"))
     setTimeout(() => {
 
         if(typeof abrirModal === "function"){
-            preencherResumoModal(score, restante);
+            preencherResumoModal(uso, restante);
             abrirModal();
         }
 
