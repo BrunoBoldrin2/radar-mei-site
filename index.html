@@ -728,10 +728,30 @@ function atualizarRadar(percentual){
   const barra = document.getElementById("radarProgress");
   if(!barra) return;
 
-  let progresso = Math.min(percentual, 120);
+  let posicaoVisual = 0;
 
-  barra.style.width = progresso + "%";
+  // ===== MAPEAMENTO INTELIGENTE =====
+
+  if(percentual <= 70){
+    // zona segura ocupa 50% da barra
+    posicaoVisual = (percentual / 70) * 50;
+  }
+  else if(percentual <= 90){
+    // atenção ocupa 25%
+    posicaoVisual = 50 + ((percentual - 70) / 20) * 25;
+  }
+  else if(percentual <= 100){
+    // risco alto ocupa 15%
+    posicaoVisual = 75 + ((percentual - 90) / 10) * 15;
+  }
+  else{
+    // estouro ocupa últimos 10%
+    posicaoVisual = 90 + Math.min((percentual - 100), 20) * 0.5;
+  }
+
+  barra.style.width = posicaoVisual + "%";
 }
+
 
 function executarDiagnosticoIA(){
 
