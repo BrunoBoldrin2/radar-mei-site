@@ -579,6 +579,29 @@ function calcularRiscoMEI(usoPercentual){
   };
 }
 
+function preverMesEstouro(faturamentoMensal){
+
+  const LIMITE_MEI = 81000;
+
+  if(!faturamentoMensal || faturamentoMensal <= 0)
+    return null;
+
+  const mesesParaEstouro = LIMITE_MEI / faturamentoMensal;
+
+  if(mesesParaEstouro > 12)
+    return null; // não estoura este ano
+
+  return Math.ceil(mesesParaEstouro);
+}
+  
+function calcularPosicaoAno(mes){
+
+  if(!mes) return 25; // seguro → começo da barra
+
+  // 12 meses = 100% da barra
+  return (mes / 12) * 100;
+}
+
   
 async function analisar(){
 
@@ -602,7 +625,21 @@ valor = Number(valor) / 100;
   loading.style.display="block";
   executarDiagnosticoIA();
 
-  resultado.innerHTML="";
+  resultado.innerHTML=
+   let textoPrevisao = "";
+
+if(mesEstouro){
+  const meses = [
+    "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+  ];
+
+  textoPrevisao =
+    "📅 Previsão de estouro: <b>"+meses[mesEstouro-1]+"</b><br><br>";
+}
+
+    
+    ;
 
   try{
     
@@ -617,6 +654,11 @@ document.getElementById("diagnosticoIA").style.display = "none";
     }
 
     const dados = await resposta.json();
+    const faturamentoMensal = valor;
+const mesEstouro = preverMesEstouro(faturamentoMensal);
+
+atualizarRadarPorMes(mesEstouro);
+
     const uso = dados.percentual_limite;
 
 
@@ -703,15 +745,16 @@ if(uso >= 90 && !sessionStorage.getItem("modalExibido")) {
 
 
 
-
- resultado.innerHTML =
+resultado.innerHTML =
   "<div style='font-size:22px;margin-bottom:8px;'>"+badge+"</div>"+
+  textoPrevisao+
   "Projeção anual: "+formatarReal(dados.projecao_anual)+"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
-   "💡 "+recomendacao+"<br><br>"+
+  "💡 "+recomendacao+"<br><br>"+
   "⚠️ Faltam aproximadamente <b>"+
   formatarReal(restante)+
   "</b> para atingir o limite anual do MEI.";
+
 
 
 
@@ -788,42 +831,16 @@ function preencherResumoModal(score, restante){
 
 });
 
-function atualizarRadar(percentual){
+function atualizarRadarPorMes(mesEstouro){
 
   const barra = document.getElementById("radarProgress");
   if(!barra) return;
 
-  let posicaoVisual = 0;
+  const posicao = calcularPosicaoAno(mesEstouro);
 
-  /*
-    Nova escala psicológica:
-
-    Seguro ocupa MUITO mais espaço visual,
-    porque é onde a maioria dos MEIs vive.
-  */
-
-  // 🟢 SEGURO (0–70%) → ocupa só 0–35% da barra
-  if(percentual <= 70){
-    posicaoVisual = (percentual / 70) * 35;
-  }
-
-  // 🟡 ATENÇÃO (70–90%) → 35% até 65%
-  else if(percentual <= 90){
-    posicaoVisual = 35 + ((percentual - 70) / 20) * 30;
-  }
-
-  // 🔴 RISCO (90–100%) → 65% até 85%
-  else if(percentual <= 100){
-    posicaoVisual = 65 + ((percentual - 90) / 10) * 20;
-  }
-
-  // 🚨 ESTOURO → últimos 15%
-  else{
-    posicaoVisual = 85 + Math.min(percentual - 100, 20) / 20 * 15;
-  }
-
-  barra.style.width = posicaoVisual + "%";
+  barra.style.width = posicao + "%";
 }
+
 
 
 
