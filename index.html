@@ -260,7 +260,16 @@ button:hover{
   }
 }
   
-  
+#emailModal{
+  z-index:9999;
+}
+
+#emailModal > div{
+  position:relative;
+  z-index:10000;
+}
+
+
 </style>
 </head>
 
@@ -464,7 +473,9 @@ height:100%;
 background:rgba(0,0,0,0.6);
 justify-content:center;
 align-items:center;
+z-index:9999;
 ">
+
 
 <div style="
 background:white;
@@ -472,7 +483,10 @@ padding:30px;
 border-radius:12px;
 text-align:center;
 max-width:400px;
+position:relative;
+z-index:10000;
 ">
+
 
 <h2>Evite ultrapassar o limite sem perceber
 </h2>
