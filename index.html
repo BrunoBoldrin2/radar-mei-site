@@ -6,17 +6,6 @@
 
 <title>MEI Seguro — Monitoramento Inteligente do Limite MEI</title>
 
-<p id="contadorMEI" style="
-font-size:14px;
-color:#6b7280;
-margin-top:-10px;
-margin-bottom:25px;
-">
-Carregando atividade...
-</p>
-
-
-
 
 <style>
 
@@ -293,6 +282,16 @@ button:hover{
 <p class="subtitle">
 Descubra antes se você vai ultrapassar o limite do MEI.
 </p>
+
+<p id="contadorMEI" style="
+font-size:14px;
+color:#6b7280;
+margin-top:-10px;
+margin-bottom:25px;
+">
+Carregando atividade...
+</p>
+  
 
 <p style="
 font-size:14px;
@@ -618,6 +617,8 @@ document.getElementById("diagnosticoIA").style.display = "none";
     }
 
     const dados = await resposta.json();
+    const uso = dados.percentual_limite;
+
 
     // ===== RADAR FISCAL INTELIGENTE =====
 
@@ -877,30 +878,7 @@ function iniciarContadorMEI(){
   setInterval(atualizar, 4000);
 }
 
-document.addEventListener("DOMContentLoaded", iniciarContadorMEI);
-  
-function iniciarContadorMEI(){
-
-  const el = document.getElementById("contadorMEI");
-  if(!el) return;
-
-  let base = 22 + Math.floor(Math.random()*15);
-
-  function atualizar(){
-
-    const variacao = Math.floor(Math.random()*5) - 2;
-    base = Math.max(14, base + variacao);
-
-    el.innerHTML =
-      "🟢 <b>"+base+" MEIs</b> analisando o limite agora";
-  }
-
-  atualizar();
-  setInterval(atualizar, 4500);
-}
-
-document.addEventListener("DOMContentLoaded", iniciarContadorMEI);
-  
+document.addEventListener("DOMContentLoaded", iniciarContadorMEI);    
 
 </script>  
   
