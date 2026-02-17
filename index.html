@@ -362,8 +362,11 @@ if(uso >= 100){
 
 
     const limiteMEI = 81000;
-const restante = Math.max(0, limiteMEI - formatarReal(dados.projecao_anual)
+const restante = Math.max(
+  0,
+  limiteMEI - dados.projecao_anual
 );
+
 
 
     // abrir modal automaticamente se score baixo
@@ -511,10 +514,6 @@ function atualizarScoreVisual(score){
     e.target.value = value;
   });
 
-});
-
-
-  e.target.value = valorFormatado;
 });
 
 
