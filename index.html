@@ -425,29 +425,31 @@ function atualizarScoreVisual(score){
 }
 
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", () => {
 
-  const inputValor = document.getElementById("valor");
+  const input = document.getElementById("valor");
 
-  inputValor.addEventListener("input", function(e){
+  if(!input) return;
 
-    let valor = e.target.value.replace(/\D/g, "");
+  input.addEventListener("input", (e) => {
 
-    if(valor.length === 0){
+    let numbers = e.target.value.replace(/\D/g, "");
+
+    if(numbers === ""){
       e.target.value = "";
       return;
     }
 
-    valor = (valor / 100).toFixed(2) + "";
+    let value = (Number(numbers) / 100).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
 
-    valor = valor
-      .replace(".", ",")
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    e.target.value = "R$ " + valor;
+    e.target.value = value;
   });
 
 });
+
 
 
 </script>
