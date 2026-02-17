@@ -408,7 +408,19 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
-   atualizarScoreVisual(score, cor);
+   atualizarScoreVisual(score, cor, () => {
+
+  botao.innerText = "✅ Análise concluída";
+  botao.style.background = "#16a34a";
+
+  setTimeout(() => {
+    botao.innerText = "Analisar risco";
+    botao.style.background = "#2563eb";
+    botao.disabled = false;
+  }, 2200);
+
+});
+
 
 
  resultado.innerHTML =
@@ -431,8 +443,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
   }
 
   botao.disabled=false;
-  botao.innerText="Analisar risco";
-  loading.style.display="none";
+  
 }
 
   window.abrirModal = function () {
@@ -460,7 +471,8 @@ function preencherResumoModal(score, restante){
     "Podemos avisar você automaticamente antes de qualquer risco.";
 }
   
-function atualizarScoreVisual(score, cor){
+function atualizarScoreVisual(score, cor, onComplete){
+
 
   const container = document.getElementById("scoreContainer");
   const barra = document.getElementById("scoreBar");
@@ -470,6 +482,11 @@ function atualizarScoreVisual(score, cor){
 
   container.style.display = "block";
 
+  // estado inicial (cinza neutro)
+  barra.style.width = "0%";
+  barra.style.background = "#d1d5db";
+  texto.innerHTML = "0/100";
+
   let progresso = 0;
 
   const animacao = setInterval(() => {
@@ -477,16 +494,26 @@ function atualizarScoreVisual(score, cor){
     progresso++;
 
     barra.style.width = progresso + "%";
-    barra.style.background = cor;
-
     texto.innerHTML = progresso + "/100";
 
-    if(progresso >= score){
-      clearInterval(animacao);
+    // leve transição de cor enquanto cresce
+    if(progresso < score * 0.6){
+      barra.style.background = "#f59e0b"; // amarelo suave
     }
+
+    if(progresso >= score){
+  barra.style.background = cor;
+  clearInterval(animacao);
+
+  if(typeof onComplete === "function"){
+    onComplete();
+  }
+}
+
 
   }, 12);
 }
+
 
 
 
