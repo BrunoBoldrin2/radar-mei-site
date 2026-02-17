@@ -654,6 +654,25 @@ document.getElementById("diagnosticoIA").style.display = "none";
     }
 
     const dados = await resposta.json();
+
+    const faturamentoMensal = valor;
+const mesEstouro = preverMesEstouro(faturamentoMensal);
+
+let textoPrevisao = "";
+
+if(mesEstouro){
+
+  const meses = [
+    "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+  ];
+
+  textoPrevisao =
+    "📅 Previsão de estouro: <b>" +
+    meses[mesEstouro - 1] +
+    "</b><br><br>";
+}
+
     const faturamentoMensal = valor;
 const mesEstouro = preverMesEstouro(faturamentoMensal);
 
@@ -744,16 +763,16 @@ if(uso >= 90 && !sessionStorage.getItem("modalExibido")) {
 
 
 
-
 resultado.innerHTML =
   "<div style='font-size:22px;margin-bottom:8px;'>"+badge+"</div>"+
-  textoPrevisao+
+  textoPrevisao +
   "Projeção anual: "+formatarReal(dados.projecao_anual)+"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
   "💡 "+recomendacao+"<br><br>"+
   "⚠️ Faltam aproximadamente <b>"+
   formatarReal(restante)+
   "</b> para atingir o limite anual do MEI.";
+
 
 
 
