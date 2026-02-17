@@ -730,27 +730,29 @@ function atualizarRadar(percentual){
 
   let posicaoVisual = 0;
 
-  // ===== ESCALA REAL DO MEI =====
-
+  // 🟢 0–70% ocupa 0–50% da barra
   if(percentual <= 70){
-    // zona segura ocupa 70% da barra
-    posicaoVisual = (percentual / 70) * 70;
+    posicaoVisual = (percentual / 70) * 50;
   }
+
+  // 🟡 70–90% ocupa 50–75%
   else if(percentual <= 90){
-    // atenção ocupa 20%
-    posicaoVisual = 70 + ((percentual - 70) / 20) * 20;
+    posicaoVisual = 50 + ((percentual - 70) / 20) * 25;
   }
+
+  // 🔴 90–100% ocupa 75–90%
   else if(percentual <= 100){
-    // risco alto ocupa 8%
-    posicaoVisual = 90 + ((percentual - 90) / 10) * 8;
+    posicaoVisual = 75 + ((percentual - 90) / 10) * 15;
   }
+
+  // 🚨 acima de 100% ocupa 90–100%
   else{
-    // estouro ocupa últimos 2%
-    posicaoVisual = 98 + Math.min(percentual - 100, 20) * 0.1;
+    posicaoVisual = 90 + Math.min((percentual - 100), 20) / 20 * 10;
   }
 
   barra.style.width = posicaoVisual + "%";
 }
+
 
 
 
