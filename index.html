@@ -423,6 +423,7 @@ function atualizarScoreVisual(score){
   });
 }
 
+  document.addEventListener("DOMContentLoaded", function () {
   const inputValor = document.getElementById("valor");
 
 inputValor.addEventListener("input", function(e){
@@ -437,7 +438,7 @@ inputValor.addEventListener("input", function(e){
 
   e.target.value = "R$ " + valor;
 });
-
+});
 
 </script>
 <footer style="
