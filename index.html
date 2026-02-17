@@ -126,7 +126,7 @@ Descubra antes se você vai ultrapassar o limite do MEI.
 
 <h2>Simule seu risco agora</h2>
 
-<input id="valor" type="text" placeholder="R$ 0,00">
+<input id="valor" type="text" placeholder="Faturamento mensal (R$)">
 
 <br>
 
@@ -423,22 +423,31 @@ function atualizarScoreVisual(score){
   });
 }
 
+
   document.addEventListener("DOMContentLoaded", function () {
+
   const inputValor = document.getElementById("valor");
 
-inputValor.addEventListener("input", function(e){
+  inputValor.addEventListener("input", function(e){
 
-  let valor = e.target.value.replace(/\D/g, "");
+    let valor = e.target.value.replace(/\D/g, "");
 
-  valor = (valor / 100).toFixed(2) + "";
+    if(valor.length === 0){
+      e.target.value = "";
+      return;
+    }
 
-  valor = valor
-    .replace(".", ",")
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    valor = (valor / 100).toFixed(2) + "";
 
-  e.target.value = "R$ " + valor;
+    valor = valor
+      .replace(".", ",")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    e.target.value = "R$ " + valor;
+  });
+
 });
-});
+
 
 </script>
 <footer style="
