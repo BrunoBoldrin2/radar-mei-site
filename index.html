@@ -566,49 +566,30 @@ const percentualAno = mesAtual / 12;
 const uso = dados.percentual_limite;
 atualizarRadar(uso);
 
+// ===== CLASSIFICAÇÃO ÚNICA DO RISCO (FONTE OFICIAL) =====
+
+let riscoTexto;
+let cor;
+
+if (uso < 70){
+  riscoTexto = "🟢 Situação segura";
+  cor = "#4CAF50";
+}
+else if (uso < 90){
+  riscoTexto = "🟡 Atenção ao crescimento";
+  cor = "#F59E0B";
+}
+else if (uso < 100){
+  riscoTexto = "🔴 Alto risco fiscal";
+  cor = "#EF4444";
+}
+else{
+  riscoTexto = "🚨 Limite ultrapassado";
+  cor = "#B91C1C";
+}
     
 
-let riscoTexto = "BAIXO";
-let cor = "#4CAF50";
-let score = 90;
-
-// zonas fiscais reais
-if(uso >= 70){
-  riscoTexto = "MODERADO";
-  cor = "#FFC107";
-  score = 65;
-}
-
-if(uso >= 90){
-  riscoTexto = "ALTO";
-  cor = "#F44336";
-  score = 40;
-}
-
-if(uso >= 100){
-  riscoTexto = "CRÍTICO";
-  cor = "#B91C1C";
-  score = 15;
-}
-
-let badge = "";
-let badgeCor = cor;
-
-if(riscoTexto === "BAIXO"){
-  badge = "🟢 Situação segura";
-}
-
-if(riscoTexto === "MODERADO"){
-  badge = "🟡 Atenção ao crescimento";
-}
-
-if(riscoTexto === "ALTO"){
-  badge = "🔴 Alto risco fiscal";
-}
-
-if(riscoTexto === "CRÍTICO"){
-  badge = "🚨 Limite ultrapassado";
-}
+let badge = riscoTexto;
 
 
 
@@ -621,7 +602,8 @@ const restante = Math.max(
 
 
     // abrir modal automaticamente se score baixo
-if(score < 60 && !sessionStorage.getItem("modalExibido")){
+if(uso >= 90 && !sessionStorage.getItem("modalExibido"))
+
 
     sessionStorage.setItem("modalExibido", "true");
 
