@@ -625,21 +625,7 @@ valor = Number(valor) / 100;
   loading.style.display="block";
   executarDiagnosticoIA();
 
-  resultado.innerHTML=
-   let textoPrevisao = "";
-
-if(mesEstouro){
-  const meses = [
-    "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-  ];
-
-  textoPrevisao =
-    "📅 Previsão de estouro: <b>"+meses[mesEstouro-1]+"</b><br><br>";
-}
-
-    
-    ;
+  
 
   try{
     
@@ -655,7 +641,7 @@ document.getElementById("diagnosticoIA").style.display = "none";
 
     const dados = await resposta.json();
 
-    const faturamentoMensal = valor;
+ const faturamentoMensal = valor;
 const mesEstouro = preverMesEstouro(faturamentoMensal);
 
 let textoPrevisao = "";
@@ -673,10 +659,8 @@ if(mesEstouro){
     "</b><br><br>";
 }
 
-    const faturamentoMensal = valor;
-const mesEstouro = preverMesEstouro(faturamentoMensal);
-
 atualizarRadarPorMes(mesEstouro);
+
 
     const uso = dados.percentual_limite;
 
