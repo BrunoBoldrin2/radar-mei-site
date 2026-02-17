@@ -231,6 +231,34 @@ button:hover{
   z-index:1;
   opacity:0.25;
 }
+
+.diagnostico{
+  margin-top:18px;
+  text-align:left;
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+  display:none;
+}
+
+.diag-linha{
+  opacity:0;
+  padding:6px 0;
+  font-size:14px;
+  color:#374151;
+  animation: aparecer 0.6s forwards;
+}
+
+@keyframes aparecer{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
   
   
 </style>
@@ -265,35 +293,16 @@ Mais de <b>300 simulações realizadas esta semana</b> por MEIs que querem evita
 
 <button id="botao" onclick="analisar()">Analisar risco</button>
 
-<p id="loading" class="loading">Analisando sua situação...</p>
-
-<div id="scoreContainer" style="margin-top:20px; display:none;">
-
-  <div style="font-weight:bold; margin-bottom:8px;">
-    Saúde Fiscal
-  </div>
-
-  <div style="
-    width:100%;
-    background:#e5e7eb;
-    border-radius:999px;
-    height:18px;
-    overflow:hidden;
-  ">
-
-    <div id="scoreBar" style="
-      height:100%;
-      width:0%;
-      background:#4CAF50;
-      transition:width 1.2s ease;
-    "></div>
-
-  </div>
-
-  <div id="scoreTexto" style="margin-top:6px; font-weight:bold;"></div>
-
+<div id="diagnosticoIA" class="diagnostico">
+  <div class="diag-linha">🔎 Analisando crescimento mensal...</div>
+  <div class="diag-linha">📊 Calculando projeção anual...</div>
+  <div class="diag-linha">⚠️ Verificando risco fiscal...</div>
 </div>
   
+
+<p id="loading" class="loading">Analisando sua situação...</p>
+
+ 
   
 <div id="resultado" class="resultado"></div>
 
@@ -531,9 +540,13 @@ valor = Number(valor) / 100;
   botao.disabled = true;
   botao.innerText = "Analisando...";
   loading.style.display="block";
+  executarDiagnosticoIA();
+
   resultado.innerHTML="";
 
   try{
+    
+document.getElementById("diagnosticoIA").style.display = "none";
 
     const resposta = await fetch(
       "https://radar-mei-api-production.up.railway.app/simular?valor="+valor
@@ -628,8 +641,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
- atualizarScoreVisual(score, cor, () => {
-
+ 
   loading.style.display = "none"; // ← ADICIONE ESTA LINHA
 
   botao.innerText = "✅ Análise concluída";
@@ -641,7 +653,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
     botao.disabled = false;
   }, 2200);
 
-});
+
 
 
 
@@ -694,50 +706,6 @@ function preencherResumoModal(score, restante){
     "Podemos avisar você automaticamente antes de qualquer risco.";
 }
   
-function atualizarScoreVisual(score, cor, onComplete){
-
-
-  const container = document.getElementById("scoreContainer");
-  const barra = document.getElementById("scoreBar");
-  const texto = document.getElementById("scoreTexto");
-
-  if(!container || !barra || !texto) return;
-
-  container.style.display = "block";
-
-  // estado inicial (cinza neutro)
-  barra.style.width = "0%";
-  barra.style.background = "#d1d5db";
-  texto.innerHTML = "0/100";
-
-  let progresso = 0;
-
-  const animacao = setInterval(() => {
-
-    progresso++;
-
-    barra.style.width = progresso + "%";
-    texto.innerHTML = progresso + "/100";
-
-    // leve transição de cor enquanto cresce
-    if(progresso < score * 0.6){
-      barra.style.background = "#f59e0b"; // amarelo suave
-    }
-
-    if(progresso >= score){
-  barra.style.background = cor;
-  clearInterval(animacao);
-
-  if(typeof onComplete === "function"){
-    onComplete();
-  }
-}
-
-
-  }, 12);
-}
-
-
 
 
   function formatarReal(valor){
@@ -782,6 +750,21 @@ function atualizarRadar(percentual){
 
   barra.style.width = progresso + "%";
 }
+
+function executarDiagnosticoIA(){
+
+  const box = document.getElementById("diagnosticoIA");
+  const linhas = document.querySelectorAll(".diag-linha");
+
+  if(!box) return;
+
+  box.style.display = "block";
+
+  linhas.forEach((linha, i) => {
+    linha.style.animationDelay = (i * 0.9) + "s";
+  });
+}
+  
 
 </script>  
   
