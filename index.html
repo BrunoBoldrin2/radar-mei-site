@@ -730,28 +730,36 @@ function atualizarRadar(percentual){
 
   let posicaoVisual = 0;
 
-  // 🟢 0–70% ocupa 0–50% da barra
+  /*
+    Nova escala psicológica:
+
+    Seguro ocupa MUITO mais espaço visual,
+    porque é onde a maioria dos MEIs vive.
+  */
+
+  // 🟢 SEGURO (0–70%) → ocupa só 0–35% da barra
   if(percentual <= 70){
-    posicaoVisual = (percentual / 70) * 50;
+    posicaoVisual = (percentual / 70) * 35;
   }
 
-  // 🟡 70–90% ocupa 50–75%
+  // 🟡 ATENÇÃO (70–90%) → 35% até 65%
   else if(percentual <= 90){
-    posicaoVisual = 50 + ((percentual - 70) / 20) * 25;
+    posicaoVisual = 35 + ((percentual - 70) / 20) * 30;
   }
 
-  // 🔴 90–100% ocupa 75–90%
+  // 🔴 RISCO (90–100%) → 65% até 85%
   else if(percentual <= 100){
-    posicaoVisual = 75 + ((percentual - 90) / 10) * 15;
+    posicaoVisual = 65 + ((percentual - 90) / 10) * 20;
   }
 
-  // 🚨 acima de 100% ocupa 90–100%
+  // 🚨 ESTOURO → últimos 15%
   else{
-    posicaoVisual = 90 + Math.min((percentual - 100), 20) / 20 * 10;
+    posicaoVisual = 85 + Math.min(percentual - 100, 20) / 20 * 15;
   }
 
   barra.style.width = posicaoVisual + "%";
 }
+
 
 
 
