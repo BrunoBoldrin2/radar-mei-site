@@ -480,21 +480,6 @@ function atualizarScoreVisual(score){
 }
 
 
-  const container = document.getElementById("scoreContainer");
-  const barra = document.getElementById("scoreBar");
-  const texto = document.getElementById("scoreTexto");
-
-  container.style.display = "block";
-
-  // pequena pausa para ativar animação
-  setTimeout(() => {
-    barra.style.width = score + "%";
-    barra.style.background = cor;
-  }, 100);
-
-  texto.innerHTML = score + "/100";
-}
-
   function formatarReal(valor){
   return valor.toLocaleString('pt-BR', {
     style: 'currency',
@@ -528,24 +513,6 @@ function atualizarScoreVisual(score){
 
 });
 
-const campoValor = document.getElementById("valor");
-
-campoValor.addEventListener("input", function(e){
-
-  let numeros = e.target.value.replace(/\D/g, "");
-
-  if(!numeros){
-    e.target.value = "";
-    return;
-  }
-
-  let valorFormatado = (Number(numeros) / 100).toLocaleString(
-    "pt-BR",
-    {
-      style: "currency",
-      currency: "BRL"
-    }
-  );
 
   e.target.value = valorFormatado;
 });
