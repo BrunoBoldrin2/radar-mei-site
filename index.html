@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Radar MEI</title>
+<title>MEI Seguro — Monitoramento Inteligente do Limite MEI</title>
 
 <style>
 
@@ -122,6 +122,16 @@ button:hover{
 Descubra antes se você vai ultrapassar o limite do MEI.
 </p>
 
+<p style="
+font-size:14px;
+color:#6b7280;
+margin-top:-20px;
+margin-bottom:30px;
+">
+Mais de <b>300 simulações realizadas esta semana</b> por MEIs que querem evitar impostos inesperados.
+</p>
+  
+
 <div class="card">
 
 <h2>Simule seu risco agora</h2>
@@ -191,6 +201,48 @@ Não substitui orientação contábil profissional.
 
 <div class="features">
 
+<div style="margin-top:70px;text-align:left;max-width:750px;margin-left:auto;margin-right:auto;">
+
+<h2 style="text-align:center;">Por que muitos MEIs ultrapassam o limite sem perceber?</h2>
+
+<p style="margin-top:20px;color:#444;line-height:1.6;">
+A maioria dos microempreendedores acompanha apenas o faturamento mensal,
+mas o limite do MEI é anual. Pequenos aumentos nas vendas ao longo do ano
+podem fazer o faturamento ultrapassar o permitido sem que o empreendedor perceba.
+</p>
+
+<p style="color:#444;line-height:1.6;">
+Quando isso acontece, podem surgir impostos retroativos, necessidade de
+mudança de regime e custos inesperados que impactam diretamente o caixa do negócio.
+</p>
+
+</div>
+
+<div style="margin-top:50px;text-align:left;max-width:750px;margin-left:auto;margin-right:auto;">
+
+<h2 style="text-align:center;">Como o MEI Seguro ajuda</h2>
+
+<ul style="margin-top:20px;color:#444;line-height:1.8;">
+<li>✔ Analisa automaticamente o ritmo do seu faturamento</li>
+<li>✔ Calcula projeções antes do risco acontecer</li>
+<li>✔ Envia alertas preventivos por e-mail</li>
+<li>✔ Ajuda você a tomar decisões antes de ultrapassar o limite</li>
+</ul>
+
+</div>
+
+<div style="margin-top:60px;text-align:center;">
+
+<h2>Estamos liberando o monitoramento automático</h2>
+
+<p style="color:#555;margin-top:10px;">
+Os primeiros usuários estão entrando na lista de acesso antecipado
+para receber alertas antes do lançamento oficial.
+</p>
+
+</div>
+  
+
 <div class="feature">
 <h3>📈 Crescimento invisível</h3>
 <p>Muitos MEIs ultrapassam o limite sem perceber.</p>
@@ -223,7 +275,7 @@ Não substitui orientação contábil profissional.
   color:#777;
   text-align:center;
 ">
-Radar MEI é uma ferramenta informativa de monitoramento fiscal.
+MEI Seguro é uma ferramenta informativa de monitoramento fiscal.
 Não prestamos consultoria contábil ou jurídica.
 Os resultados apresentados são estimativas e podem variar conforme a legislação vigente.
 </footer>
@@ -408,7 +460,9 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
 
     resultado.style.backgroundColor=cor;
     resultado.style.color="white";
-   atualizarScoreVisual(score, cor, () => {
+ atualizarScoreVisual(score, cor, () => {
+
+  loading.style.display = "none"; // ← ADICIONE ESTA LINHA
 
   botao.innerText = "✅ Análise concluída";
   botao.style.background = "#16a34a";
@@ -420,6 +474,7 @@ if(score < 60 && !sessionStorage.getItem("modalExibido")){
   }, 2200);
 
 });
+
 
 
 
