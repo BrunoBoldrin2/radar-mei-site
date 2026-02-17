@@ -5,14 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MEI Seguro — Monitoramento Inteligente do Limite MEI</title>
+<p class="subtitle">
+Descubra antes se você vai ultrapassar o limite do MEI.
+</p>
 
 <p id="contadorMEI" style="
 font-size:14px;
 color:#6b7280;
 margin-top:-10px;
+margin-bottom:25px;
 ">
 Carregando atividade...
 </p>
+
+
 
 
 <style>
@@ -622,6 +628,8 @@ const mesAtual = new Date().getMonth() + 1;
 const percentualAno = mesAtual / 12;
 
 const risco = calcularRiscoMEI(dados.percentual_limite);
+const recomendacao = gerarRecomendacao(risco);
+
 atualizarRadar(uso);
 
 // ===== CLASSIFICAÇÃO ÚNICA DO RISCO (FONTE OFICIAL) =====
@@ -702,6 +710,7 @@ if(uso >= 90 && !sessionStorage.getItem("modalExibido")) {
   "<div style='font-size:22px;margin-bottom:8px;'>"+badge+"</div>"+
   "Projeção anual: "+formatarReal(dados.projecao_anual)+"<br>"+
   "Uso do limite: "+dados.percentual_limite+"%<br><br>"+
+   "💡 "+recomendacao+"<br><br>"+
   "⚠️ Faltam aproximadamente <b>"+
   formatarReal(restante)+
   "</b> para atingir o limite anual do MEI.";
@@ -836,6 +845,21 @@ function executarDiagnosticoIA(){
   });
 }
 
+function gerarRecomendacao(risco){
+
+  if(risco.nivel === 1)
+    return "Continue monitorando mensalmente.";
+
+  if(risco.nivel === 2)
+    return "Seu crescimento exige atenção fiscal nos próximos meses.";
+
+  if(risco.nivel === 3)
+    return "Avalie migrar para ME para evitar impostos retroativos.";
+
+  return "Migração imediata recomendada para evitar penalidades.";
+}
+  
+
 function iniciarContadorMEI(){
 
   const el = document.getElementById("contadorMEI");
@@ -858,6 +882,27 @@ function iniciarContadorMEI(){
 
 document.addEventListener("DOMContentLoaded", iniciarContadorMEI);
   
+function iniciarContadorMEI(){
+
+  const el = document.getElementById("contadorMEI");
+  if(!el) return;
+
+  let base = 22 + Math.floor(Math.random()*15);
+
+  function atualizar(){
+
+    const variacao = Math.floor(Math.random()*5) - 2;
+    base = Math.max(14, base + variacao);
+
+    el.innerHTML =
+      "🟢 <b>"+base+" MEIs</b> analisando o limite agora";
+  }
+
+  atualizar();
+  setInterval(atualizar, 4500);
+}
+
+document.addEventListener("DOMContentLoaded", iniciarContadorMEI);
   
 
 </script>  
